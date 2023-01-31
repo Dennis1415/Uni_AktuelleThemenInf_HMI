@@ -2,20 +2,27 @@ package labrithmenMain;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
 
 public class GameScreenController {
-    @FXML
-    private Circle myCircle;
+    @FXML private GridPane gridPane;
+    @FXML private Circle myCircle;
     @FXML private Button playButton;
     @FXML private Button resetButton;
+
+
 
    @FXML private Button ex1;
    @FXML private Button ex2;
    @FXML private Button ex3;
    @FXML private Button ex4;
    @FXML private Button ex5;
+
+
+
     private double x;
     private double y;
     public int counter = 0;
@@ -99,27 +106,26 @@ public class GameScreenController {
         }
     }
     public void play(ActionEvent e){
-        long start = System.currentTimeMillis();
         String[] text = {ex1.getText(), ex2.getText(), ex3.getText(), ex4.getText(), ex5.getText()};
         for(int i = 0; i < text.length; i++){
                 if(text[i] == "up"){
-                    myCircle.setCenterY(y-=36.5);
+                    GridPane.setRowIndex(myCircle,GridPane.getRowIndex(myCircle)-1);
                 }else if(text[i] == "down"){
-                    myCircle.setCenterY(y+=36.5);
+                    GridPane.setRowIndex(myCircle,GridPane.getRowIndex(myCircle)+1);
                 }else if(text[i] == "left"){
-                    myCircle.setCenterX(x-=36.5);
+                    GridPane.setColumnIndex(myCircle,GridPane.getColumnIndex(myCircle)-1);
                 }else if(text[i] == "right"){
-                    while(System.currentTimeMillis() - start < 5000){}
-                    myCircle.setCenterX(x+=36.5);
+                    GridPane.setColumnIndex(myCircle,GridPane.getColumnIndex(myCircle)+1);
                 }
             }
+        reset();
         }
-    public void reset(ActionEvent e){
+    public void reset(){
         counter = 0;
-        ex1.setText("none");
-        ex2.setText("none");
-        ex3.setText("none");
-        ex4.setText("none");
-        ex5.setText("none");
+        ex1.setText("");
+        ex2.setText("");
+        ex3.setText("");
+        ex4.setText("");
+        ex5.setText("");
     }
 }

@@ -14,8 +14,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
         stage.setTitle("Hello!");
         stage.setScene(new Scene(root));
-        stage.setHeight(513);
-        stage.setWidth(699);
+        stage.setHeight(750);
+        stage.setWidth(1200);
         stage.show();
     }
 
