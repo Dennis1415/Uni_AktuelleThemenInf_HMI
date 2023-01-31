@@ -47,6 +47,7 @@ public class HelloController{
             ex5.setText("up");
             counter++;
         }
+        System.out.print(e.toString());
         //myCircle.setCenterY(y-=10);
         }
     public void down(ActionEvent e){
