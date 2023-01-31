@@ -1,20 +1,11 @@
-package com.example.labrithmen;
+package labrithmenMain;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class HelloController{
+public class GameScreenController {
     @FXML
     private Circle myCircle;
     @FXML private Button playButton;

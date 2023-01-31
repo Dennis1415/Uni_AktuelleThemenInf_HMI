@@ -1,4 +1,4 @@
-package com.example.labrithmen;
+package labrithmenMain;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,10 +8,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("hello-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
         stage.setTitle("Hello!");
         stage.setScene(new Scene(root));
         stage.setHeight(513);

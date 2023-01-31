@@ -3,6 +3,6 @@ module com.example.labrithmen {
     requires javafx.fxml;
 
 
-    opens com.example.labrithmen to javafx.fxml;
-    exports com.example.labrithmen;
+    opens labrithmenMain to javafx.fxml;
+    exports labrithmenMain;
 }
