@@ -1,6 +1,5 @@
 package labrithmenMain;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -15,7 +14,7 @@ public class GameScreenController {
     @FXML
     private GridPane gridPane;
     @FXML
-    private Circle myCircle;
+    private Circle player;
     @FXML
     private Polygon goal;
     @FXML
@@ -26,15 +25,20 @@ public class GameScreenController {
     @FXML
     private Label inputLabel;
 
-   final int  minRow=0;
-   final int maxRow=4;
+    //specifies the max bounds of the grid
+    final int MIN_ROW = 0;
+    final int MAX_ROW = 4;
+    final int MIN_COL = 0;
+    final int MAX_COL = 8;
 
-    final  int minCol=0;
-    final  int maxCol=8;
 
+    //initializes player start position and goal etc
+    public void initializeLevel(){
 
+    }
+
+    //saves pressed direction buttons as Strings e.g. "up" , "down" etc.
     public ArrayList<String> buttonInput = new ArrayList<String>();
-
 
     @FXML
     public void up() {
@@ -57,51 +61,54 @@ public class GameScreenController {
         inputLabel.setText(buttonInput.toString());
     }
 
-
-
-
-
-
+    //Moves player node depending on direction passed by String
     public void moveCircle(String s) {
         switch (s) {
             case "up":
-                if(GridPane.getRowIndex(myCircle)-1 >= minRow) {
-                    GridPane.setRowIndex(myCircle, GridPane.getRowIndex(myCircle) - 1);}
+                if (GridPane.getRowIndex(player) - 1 >= MIN_ROW) {
+                    GridPane.setRowIndex(player, GridPane.getRowIndex(player) - 1);
+                }
                 break;
 
             case "down":
-                if(GridPane.getRowIndex(myCircle)+1 <= maxRow) {
-                GridPane.setRowIndex(myCircle, GridPane.getRowIndex(myCircle) + 1);}
+                if (GridPane.getRowIndex(player) + 1 <= MAX_ROW) {
+                    GridPane.setRowIndex(player, GridPane.getRowIndex(player) + 1);
+                }
                 break;
             case "left":
-                if(GridPane.getColumnIndex(myCircle)-1 >= minCol) {
-                GridPane.setColumnIndex(myCircle, GridPane.getColumnIndex(myCircle) - 1);}
+                if (GridPane.getColumnIndex(player) - 1 >= MIN_COL) {
+                    GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) - 1);
+                }
                 break;
 
             case "right":
-                if(GridPane.getColumnIndex(myCircle)+1 <= maxCol) {
-                    GridPane.setColumnIndex(myCircle, GridPane.getColumnIndex(myCircle) + 1);}
+                if (GridPane.getColumnIndex(player) + 1 <= MAX_COL) {
+                    GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) + 1);
+                }
                 break;
         }
     }
 
-    public boolean reachedGoal(Node player, Node goal){
-        if(GridPane.getColumnIndex(player) == GridPane.getColumnIndex(goal) && GridPane.getRowIndex(player) == GridPane.getRowIndex(goal)){
+    //Checks if player Node is on the goal Node
+    public boolean reachedGoal(Node player, Node goal) {
+        if (GridPane.getColumnIndex(player) == GridPane.getColumnIndex(goal) && GridPane.getRowIndex(player) == GridPane.getRowIndex(goal)) {
             return true;
         }
         return false;
     }
+
+    //Specifies what happens after Play-Button was pressed
     public void play() throws InterruptedException {
 
         for (String s : buttonInput) {
             moveCircle(s);
-
         }
-        if(reachedGoal(myCircle,goal)){
-            System.out.println("GEWONENEENENEN");
+        if (reachedGoal(player, goal)) {
+            System.out.println("GEWONNEN!!!!!!!!!!!!");
         }
         reset();
     }
+
 
     public void reset() {
         buttonInput.clear();
