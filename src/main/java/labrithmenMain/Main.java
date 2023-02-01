@@ -12,9 +12,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("gameScreen.fxml"));
-        stage.setTitle("Hello!");
+        stage.setTitle("Labrithmen!");
         stage.setScene(new Scene(root));
-        stage.setHeight(750);
+        stage.setHeight(800);
         stage.setWidth(1200);
         stage.show();
     }
