@@ -1,5 +1,6 @@
 package labrithmenMain;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,12 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,7 +37,8 @@ public class GameScreenController implements Initializable {
     @FXML
     private Label inputLabel;
 
-
+    @FXML
+    private HBox navigationBox;
 
     //specifies the max bounds of the grid
     final int MIN_ROW = 0;
@@ -42,17 +46,40 @@ public class GameScreenController implements Initializable {
     final int MIN_COL = 0;
     final int MAX_COL = 8;
 
+    // (0|0) - (8|4)
+    int xPLAYER_START=0;
+    int yPLAYER_START=0;
+    int xGOAL=1;
+    int yGOAL=3;
+
+    int currentLvl=1;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeLevel(0,0,8,4); // (0|0) - (8|4)
+        initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
         initializeObstacles();
     }
 
     public void initializeObstacles(){
-       // Rectangle obstacle2 = new Rectangle(100,100,Color.GRAY);
-       // gridPane.add(obstacle2,1,1);
-        //obstacle2.setStroke(Color.BLACK);
-        //obstacle2.setStrokeType(StrokeType.INSIDE);
+        switch (currentLvl) {
+            case 1:
+            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 1);
+            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 2);
+            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 3);
+            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 4);
+            break;
+            case 2:
+                loadLvl2();
+                break;
+
+            case 3:
+                loadLvl3();
+            break;
+
+            default:
+        }
+    }
+    public void loadLvl2(){
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,3);
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,4);
 
@@ -64,10 +91,20 @@ public class GameScreenController implements Initializable {
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,2);
         gridPane.add(new Rectangle(100,100,Color.GRAY),5,2);
         gridPane.add(new Rectangle(100,100,Color.GRAY),6,2);
+    }
 
+    public void loadLvl3(){
+        gridPane.add(new Rectangle(100,100,Color.GRAY),0,3);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),0,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,0);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,2);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),3,2);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,2);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),5,2);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),6,2);
         gridPane.add(new Rectangle(100,100,Color.GRAY),3,4);
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
-
         gridPane.add(new Rectangle(100,100,Color.GRAY),7,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),8,0);
     }
@@ -147,8 +184,22 @@ public class GameScreenController implements Initializable {
         }
     }
 
+    @FXML
+    void restartLvl(ActionEvent event) {
+            inputLabel.setText("");
+            initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
+            navigationBox.setVisible(false);
+    }
 
+    @FXML
+    void nextLvl(ActionEvent event) {
+        currentLvl++;
+        inputLabel.setText("");
+        initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
+        navigationBox.setVisible(false);
+        initializeObstacles();
 
+    }
 
     //Checks if player Node is on the goal Node
     public boolean reachedGoal() {
@@ -165,15 +216,15 @@ public class GameScreenController implements Initializable {
             moveCircle(s);
         }
         if (reachedGoal()) {
-            System.out.println("GEWONNEN!!!!!!!!!!!!");
+            inputLabel.setText("GEWONNEN!!!!!!!!!!!!");
+            navigationBox.setVisible(true);
         }
         reset();
     }
 
-
     public void reset() {
         directionsInput.clear();
-        inputLabel.setText("");
+       // inputLabel.setText("");
     }
 
 
