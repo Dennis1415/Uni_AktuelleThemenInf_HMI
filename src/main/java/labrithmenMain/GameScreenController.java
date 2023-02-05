@@ -1,28 +1,43 @@
 package labrithmenMain;
 
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
-import javafx.util.Duration;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.ResourceBundle;
 
 public class GameScreenController implements Initializable {
+    //specifies the max bounds of the grid
+    final int MIN_ROW = 0;
+    final int MAX_ROW = 4;
+    final int MIN_COL = 0;
+    final int MAX_COL = 8;
+    //saves pressed direction buttons as Strings e.g. "up" , "down" etc.
+    public ArrayList<String> directionsInput = new ArrayList<String>();
+    // (0|0) - (8|4)
+
+    int xGOAL=1;
+    int yGOAL=3;
+    int currentLvl=1;
+
+    int currentMoves=0;
+    int overallMoves=0;
+
+
     @FXML
     private GridPane gridPane;
     @FXML
@@ -33,41 +48,50 @@ public class GameScreenController implements Initializable {
     private Button playButton;
     @FXML
     private Button resetButton;
-
     @FXML
     private Label inputLabel;
-
     @FXML
     private HBox navigationBox;
+    @FXML
+    private Button lvl1;
+    @FXML
+    private Button lvl2;
+    @FXML
+    private Button lvl3;
+    @FXML
+    private Button lvl4;
+    @FXML
+    private Button lvl5;
+    @FXML
+    private Button lvl6;
+    @FXML
+    private Text moves;
+    @FXML
+    private Text score;
+    @FXML
+    private VBox levelVbox;
+    @FXML
+    private Button nextButton;
 
-    //specifies the max bounds of the grid
-    final int MIN_ROW = 0;
-    final int MAX_ROW = 4;
-    final int MIN_COL = 0;
-    final int MAX_COL = 8;
 
-    // (0|0) - (8|4)
-    int xPLAYER_START=0;
-    int yPLAYER_START=0;
-    int xGOAL=1;
-    int yGOAL=3;
-
-    int currentLvl=1;
+    @FXML
+    private Text lvlText;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
-        initializeObstacles();
+        initializeLevel();
     }
 
-    public void initializeObstacles(){
+    public void initializeLevel(){
+        navigationBox.setVisible(false);
+        currentMoves=0;
+        moves.setText("Moves: "+currentMoves);
+        inputLabel.setText("");
+
         switch (currentLvl) {
             case 1:
-            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 1);
-            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 2);
-            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 3);
-            gridPane.add(new Rectangle(100, 100, Color.GRAY), 0, 4);
-            break;
+                loadLvl1();
+                break;
             case 2:
                 loadLvl2();
                 break;
@@ -75,11 +99,109 @@ public class GameScreenController implements Initializable {
             case 3:
                 loadLvl3();
             break;
-
-            default:
+            case 4:
+                loadLvl4();
+            break;
+            case 5:
+                loadLvl5();
+                break;
+            case 6:
+                loadLvl6();
+                break;
         }
     }
+
+    //Searches for all the rectanlges (obstacles) on the grid, saves it in a list and removes them afterwards
+    public void clearGrid() {
+        ArrayList<Node> nodesRemove = new ArrayList<Node>();
+            for (Node node : gridPane.getChildren()) {
+                if (node instanceof Rectangle) {
+                    nodesRemove.add(node);
+                   // gridPane.getChildren().remove(node);
+                }
+            }
+            gridPane.getChildren().removeAll(nodesRemove);
+        }
+
+
+    public void loadLvl1(){
+        clearGrid();
+        currentLvl=1;
+        lvlText.setText("Level " +currentLvl);
+        initializePlayerAndGoal(0,0,2,0);
+
+    }
+
     public void loadLvl2(){
+        clearGrid();
+        currentLvl=2;
+        lvlText.setText("Level " +currentLvl);
+
+        initializePlayerAndGoal(0,0,6,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,0);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,3);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
+
+
+    }
+
+    public void loadLvl3(){
+        currentLvl=3;
+
+        clearGrid();
+        lvlText.setText("Level " +currentLvl);
+
+
+        initializePlayerAndGoal(0,0,5,4);
+
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,0);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,2);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,4);
+
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,0);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,3);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
+    }
+
+    public void loadLvl4(){
+        currentLvl=4;
+        clearGrid();
+        lvlText.setText("Level " +currentLvl);
+
+        initializePlayerAndGoal(0,0,8,4);
+
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,0);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),3,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),5,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),6,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),7,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),8,1);
+
+
+        gridPane.add(new Rectangle(100,100,Color.GRAY),1,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),2,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),3,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),5,4);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),6,4);
+
+
+    }
+
+    @FXML
+    void loadLvl5() {
+        currentLvl=5;
+
+        clearGrid();
+        lvlText.setText("Level " +currentLvl);
+
+        initializePlayerAndGoal(0,0,3,0);
+
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,3);
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,4);
 
@@ -92,8 +214,15 @@ public class GameScreenController implements Initializable {
         gridPane.add(new Rectangle(100,100,Color.GRAY),5,2);
         gridPane.add(new Rectangle(100,100,Color.GRAY),6,2);
     }
+    @FXML
+    void loadLvl6() {
+        currentLvl=6;
 
-    public void loadLvl3(){
+        clearGrid();
+        lvlText.setText("Level " +currentLvl);
+
+        initializePlayerAndGoal(0,0,5,4);
+
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,3);
         gridPane.add(new Rectangle(100,100,Color.GRAY),0,4);
         gridPane.add(new Rectangle(100,100,Color.GRAY),2,1);
@@ -107,11 +236,11 @@ public class GameScreenController implements Initializable {
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
         gridPane.add(new Rectangle(100,100,Color.GRAY),7,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),8,0);
+
     }
 
-
     //initializes player start position and goal etc
-    public void initializeLevel(int xPlayer, int yPlayer, int xGoal, int yGoal){
+    public void initializePlayerAndGoal(int xPlayer, int yPlayer, int xGoal, int yGoal){
         GridPane.setRowIndex(player, yPlayer);
         GridPane.setColumnIndex(player, xPlayer);
 
@@ -129,10 +258,6 @@ public class GameScreenController implements Initializable {
         }
         return false;
     }
-
-
-    //saves pressed direction buttons as Strings e.g. "up" , "down" etc.
-    public ArrayList<String> directionsInput = new ArrayList<String>();
 
     @FXML
     public void up() {
@@ -162,23 +287,29 @@ public class GameScreenController implements Initializable {
             case "up":
                 if (GridPane.getRowIndex(player) - 1 >= MIN_ROW && !isOccupied(GridPane.getRowIndex(player)-1,GridPane.getColumnIndex(player))) {
                     GridPane.setRowIndex(player, GridPane.getRowIndex(player) - 1);
+                    currentMoves++;
                 }
                 break;
 
             case "down":
                 if (GridPane.getRowIndex(player) + 1 <= MAX_ROW && !isOccupied(GridPane.getRowIndex(player)+1,GridPane.getColumnIndex(player))) {
                     GridPane.setRowIndex(player, GridPane.getRowIndex(player) + 1);
+                    currentMoves++;
+
                 }
                 break;
             case "left":
                 if (GridPane.getColumnIndex(player) - 1 >= MIN_COL && !isOccupied(GridPane.getRowIndex(player),GridPane.getColumnIndex(player)-1)) {
                     GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) - 1);
+                    currentMoves++;
+
                 }
                 break;
 
             case "right":
                 if (GridPane.getColumnIndex(player) + 1 <= MAX_COL && !isOccupied(GridPane.getRowIndex(player),GridPane.getColumnIndex(player)+1)) {
                     GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) + 1);
+                    currentMoves++;
                 }
                 break;
         }
@@ -186,19 +317,14 @@ public class GameScreenController implements Initializable {
 
     @FXML
     void restartLvl(ActionEvent event) {
-            inputLabel.setText("");
-            initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
-            navigationBox.setVisible(false);
+            initializeLevel();
     }
 
     @FXML
     void nextLvl(ActionEvent event) {
+        overallMoves+=currentMoves;
         currentLvl++;
-        inputLabel.setText("");
-        initializeLevel(xPLAYER_START,yPLAYER_START,xGOAL,yGOAL);
-        navigationBox.setVisible(false);
-        initializeObstacles();
-
+        initializeLevel();
     }
 
     //Checks if player Node is on the goal Node
@@ -210,21 +336,31 @@ public class GameScreenController implements Initializable {
     }
 
     //Specifies what happens after Play-Button was pressed
-    public void play() throws InterruptedException {
+    public void play() {
 
         for (String s : directionsInput) {
             moveCircle(s);
         }
-        if (reachedGoal()) {
-            inputLabel.setText("GEWONNEN!!!!!!!!!!!!");
-            navigationBox.setVisible(true);
-        }
+        moves.setText("Moves: "+currentMoves);
         reset();
+
+        if (reachedGoal()) {
+            inputLabel.setText("Geschafft! Du brauchtest "+currentMoves +" moves");
+            navigationBox.setVisible(true);
+
+
+            if(currentLvl == 6){
+                levelVbox.setVisible(true);
+                overallMoves+=currentMoves;
+                inputLabel.setText("Spiel durchgespielt! Benötigte Moves: "+overallMoves);
+                nextButton.setVisible(false);
+            }
+            }
     }
 
     public void reset() {
         directionsInput.clear();
-       // inputLabel.setText("");
+       inputLabel.setText("");
     }
 
 

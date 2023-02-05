@@ -8,9 +8,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="labrithmenMain.GameScreenController">
    <children>
@@ -19,7 +21,7 @@
       <Button layoutX="180.0" layoutY="640.0" mnemonicParsing="false" onAction="#right" prefHeight="80.0" prefWidth="80.0" text="right" />
       <Button layoutX="20.0" layoutY="640.0" mnemonicParsing="false" onAction="#left" prefHeight="80.0" prefWidth="80.0" text="left" />
       <Button fx:id="playButton" layoutX="1018.0" layoutY="554.0" mnemonicParsing="false" onAction="#play" prefHeight="160.0" prefWidth="160.0" text="Play" />
-      <Button layoutX="280.0" layoutY="642.0" mnemonicParsing="false" onAction="#reset" prefHeight="25.0" prefWidth="126.0" text="reset" />
+      <Button layoutX="302.0" layoutY="643.0" mnemonicParsing="false" onAction="#reset" prefHeight="37.0" prefWidth="126.0" text="reset input" />
       <GridPane id="panel" fx:id="gridPane" alignment="TOP_RIGHT" gridLinesVisible="true" layoutX="280.0" layoutY="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -48,16 +50,42 @@
             <Insets />
          </opaqueInsets>
       </GridPane>
-      <Label fx:id="inputLabel" layoutX="464.0" layoutY="594.0" prefHeight="123.0" prefWidth="533.0">
+      <Label fx:id="inputLabel" layoutX="464.0" layoutY="637.0" prefHeight="80.0" prefWidth="533.0">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <HBox fx:id="navigationBox" layoutX="761.0" layoutY="630.0" prefHeight="51.0" prefWidth="200.0" visible="false">
+      <HBox fx:id="navigationBox" layoutX="783.0" layoutY="554.0" prefHeight="51.0" prefWidth="200.0" visible="false">
          <children>
             <Button mnemonicParsing="false" onAction="#restartLvl" prefHeight="50.0" prefWidth="100.0" text="Again" />
-            <Button mnemonicParsing="false" onAction="#nextLvl" prefHeight="50.0" prefWidth="100.0" text="Next" />
+            <Button fx:id="nextButton" mnemonicParsing="false" onAction="#nextLvl" prefHeight="50.0" prefWidth="100.0" text="Next" />
          </children>
       </HBox>
+      <VBox fx:id="levelVbox" layoutX="20.0" layoutY="87.0" prefHeight="237.0" prefWidth="100.0" visible="false">
+         <children>
+            <Button fx:id="lvl1" mnemonicParsing="false" onAction="#loadLvl1" prefHeight="37.0" prefWidth="100.0" text="Level 1" />
+            <Button fx:id="lvl2" mnemonicParsing="false" onAction="#loadLvl2" prefHeight="37.0" prefWidth="100.0" text="Level 2" />
+            <Button fx:id="lvl3" mnemonicParsing="false" onAction="#loadLvl3" prefHeight="37.0" prefWidth="100.0" text="Level 3" />
+            <Button fx:id="lvl4" mnemonicParsing="false" onAction="#loadLvl4" prefHeight="37.0" prefWidth="100.0" text="Level 4" />
+            <Button fx:id="lvl5" mnemonicParsing="false" onAction="#loadLvl5" prefHeight="37.0" prefWidth="100.0" text="Level 5" />
+            <Button fx:id="lvl6" mnemonicParsing="false" onAction="#loadLvl6" prefHeight="37.0" prefWidth="100.0" text="Level 6" />
+         </children>
+      </VBox>
+      <Text fx:id="score" layoutX="24.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:" wrappingWidth="192.0">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Button layoutX="302.0" layoutY="677.0" mnemonicParsing="false" onAction="#restartLvl" prefHeight="37.0" prefWidth="126.0" text="restart Level" />
+      <Text fx:id="moves" layoutX="26.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Moves:" wrappingWidth="126.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="lvlText" layoutX="24.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Level 1">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
