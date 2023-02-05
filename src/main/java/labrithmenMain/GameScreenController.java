@@ -5,7 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,10 +19,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.ResourceBundle;
+
 
 public class GameScreenController implements Initializable {
     //specifies the max bounds of the grid
@@ -36,7 +42,7 @@ public class GameScreenController implements Initializable {
 
     int currentMoves=0;
     int overallMoves=0;
-
+    int overallScore=0;
 
     @FXML
     private GridPane gridPane;
@@ -72,6 +78,13 @@ public class GameScreenController implements Initializable {
     private VBox levelVbox;
     @FXML
     private Button nextButton;
+    @FXML
+    private Hyperlink hyperLink;
+
+
+    @FXML
+    private AnchorPane anchorPane;
+
 
 
     @FXML
@@ -79,6 +92,7 @@ public class GameScreenController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         initializeLevel();
     }
 
@@ -95,7 +109,6 @@ public class GameScreenController implements Initializable {
             case 2:
                 loadLvl2();
                 break;
-
             case 3:
                 loadLvl3();
             break;
@@ -110,8 +123,34 @@ public class GameScreenController implements Initializable {
                 break;
         }
     }
+    @FXML
+    void readKeyboardInput(KeyEvent event) {
+        System.out.println("KEY PRESSED");
+        KeyCode key = event.getCode();
+        switch (key) {
+            case W:
+          //  case UP:
+                up();
+                break;
+            case A:
+           // case LEFT:
+                left();
+                break;
+            case D:
+           // case RIGHT:
+                right();
+                break;
+            case S:
+            //case DOWN:
+                down();
+                break;
+           // case ENTER:
+           //     play();
+           //     break;
+        }
+    }
 
-    //Searches for all the rectanlges (obstacles) on the grid, saves it in a list and removes them afterwards
+    //Searches for all the rectangles (obstacles) on the grid, saves it in a list and removes them afterwards
     public void clearGrid() {
         ArrayList<Node> nodesRemove = new ArrayList<Node>();
             for (Node node : gridPane.getChildren()) {
@@ -128,7 +167,7 @@ public class GameScreenController implements Initializable {
         clearGrid();
         currentLvl=1;
         lvlText.setText("Level " +currentLvl);
-        initializePlayerAndGoal(0,0,2,0);
+        initializePlayerAndGoal(2,2,5,2);
 
     }
 
@@ -137,7 +176,7 @@ public class GameScreenController implements Initializable {
         currentLvl=2;
         lvlText.setText("Level " +currentLvl);
 
-        initializePlayerAndGoal(0,0,6,4);
+        initializePlayerAndGoal(1,1,6,4);
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,0);
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,3);
@@ -181,6 +220,8 @@ public class GameScreenController implements Initializable {
         gridPane.add(new Rectangle(100,100,Color.GRAY),6,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),7,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),8,1);
+        gridPane.add(new Rectangle(100,100,Color.GRAY),4,2);
+
 
 
         gridPane.add(new Rectangle(100,100,Color.GRAY),1,4);
@@ -236,8 +277,8 @@ public class GameScreenController implements Initializable {
         gridPane.add(new Rectangle(100,100,Color.GRAY),4,4);
         gridPane.add(new Rectangle(100,100,Color.GRAY),7,1);
         gridPane.add(new Rectangle(100,100,Color.GRAY),8,0);
-
     }
+
 
     //initializes player start position and goal etc
     public void initializePlayerAndGoal(int xPlayer, int yPlayer, int xGoal, int yGoal){
@@ -258,6 +299,15 @@ public class GameScreenController implements Initializable {
         }
         return false;
     }
+
+
+    @FXML
+    void openLink(ActionEvent event) throws IOException {
+    System.out.println("Link clicked!!");                               //insert Google Umfrage Link here!!
+   ProcessBuilder processBuilder = new ProcessBuilder("cmd","/c","start","https://www.google.com");
+   processBuilder.start();
+    }
+
 
     @FXML
     public void up() {
@@ -323,6 +373,7 @@ public class GameScreenController implements Initializable {
     @FXML
     void nextLvl(ActionEvent event) {
         overallMoves+=currentMoves;
+        overallScore+=100-(currentMoves*2);
         currentLvl++;
         initializeLevel();
     }
@@ -348,19 +399,21 @@ public class GameScreenController implements Initializable {
             inputLabel.setText("Geschafft! Du brauchtest "+currentMoves +" moves");
             navigationBox.setVisible(true);
 
-
             if(currentLvl == 6){
                 levelVbox.setVisible(true);
                 overallMoves+=currentMoves;
+                overallScore+=100-(currentMoves*2);
+                score.setText("Score: "+overallScore);
                 inputLabel.setText("Spiel durchgespielt! Benötigte Moves: "+overallMoves);
                 nextButton.setVisible(false);
+                hyperLink.setVisible(true);
             }
             }
     }
 
     public void reset() {
         directionsInput.clear();
-       inputLabel.setText("");
+        inputLabel.setText("");
     }
 
 
