@@ -304,7 +304,7 @@ public class GameScreenController implements Initializable {
     @FXML
     void openLink(ActionEvent event) throws IOException {
     System.out.println("Link clicked!!");                               //insert Google Umfrage Link here!!
-   ProcessBuilder processBuilder = new ProcessBuilder("cmd","/c","start","https://www.google.com");
+   ProcessBuilder processBuilder = new ProcessBuilder("cmd","/c","start","https://wd1o5l2wmjf.typeform.com/to/iFqcq91a");
    processBuilder.start();
     }
 
