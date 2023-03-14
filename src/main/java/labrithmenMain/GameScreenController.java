@@ -40,9 +40,15 @@ public class GameScreenController implements Initializable {
     int yGOAL=3;
     int currentLvl=1;
 
+    int currentSteps =0;
     int currentMoves=0;
+
+    int overallSteps =0;
     int overallMoves=0;
     int overallScore=0;
+    int tempScore = 0;
+
+    int keyboardMoves=0;
 
     @FXML
     private GridPane gridPane;
@@ -98,8 +104,9 @@ public class GameScreenController implements Initializable {
 
     public void initializeLevel(){
         navigationBox.setVisible(false);
+        currentSteps =0;
         currentMoves=0;
-        moves.setText("Moves: "+currentMoves);
+        moves.setText("Steps: "+ currentSteps +"\nMoves: "+currentMoves);
         inputLabel.setText("");
 
         switch (currentLvl) {
@@ -131,18 +138,22 @@ public class GameScreenController implements Initializable {
             case W:
           //  case UP:
                 up();
+            keyboardMoves++;
                 break;
             case A:
            // case LEFT:
                 left();
+                keyboardMoves++;
                 break;
             case D:
            // case RIGHT:
                 right();
+                keyboardMoves++;
                 break;
             case S:
             //case DOWN:
                 down();
+                keyboardMoves++;
                 break;
            // case ENTER:
            //     play();
@@ -337,21 +348,21 @@ public class GameScreenController implements Initializable {
             case "up":
                 if (GridPane.getRowIndex(player) - 1 >= MIN_ROW && !isOccupied(GridPane.getRowIndex(player)-1,GridPane.getColumnIndex(player))) {
                     GridPane.setRowIndex(player, GridPane.getRowIndex(player) - 1);
-                    currentMoves++;
+                   // currentSteps++; when we calculate it here - running against an obstacle isnt counted
                 }
                 break;
 
             case "down":
                 if (GridPane.getRowIndex(player) + 1 <= MAX_ROW && !isOccupied(GridPane.getRowIndex(player)+1,GridPane.getColumnIndex(player))) {
                     GridPane.setRowIndex(player, GridPane.getRowIndex(player) + 1);
-                    currentMoves++;
+                   // currentSteps++;
 
                 }
                 break;
             case "left":
                 if (GridPane.getColumnIndex(player) - 1 >= MIN_COL && !isOccupied(GridPane.getRowIndex(player),GridPane.getColumnIndex(player)-1)) {
                     GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) - 1);
-                    currentMoves++;
+                   // currentSteps++;
 
                 }
                 break;
@@ -359,7 +370,7 @@ public class GameScreenController implements Initializable {
             case "right":
                 if (GridPane.getColumnIndex(player) + 1 <= MAX_COL && !isOccupied(GridPane.getRowIndex(player),GridPane.getColumnIndex(player)+1)) {
                     GridPane.setColumnIndex(player, GridPane.getColumnIndex(player) + 1);
-                    currentMoves++;
+                   // currentSteps++;
                 }
                 break;
         }
@@ -372,8 +383,10 @@ public class GameScreenController implements Initializable {
 
     @FXML
     void nextLvl(ActionEvent event) {
-        overallMoves+=currentMoves;
-        overallScore+=100-(currentMoves*2);
+
+
+
+
         currentLvl++;
         initializeLevel();
     }
@@ -392,19 +405,30 @@ public class GameScreenController implements Initializable {
         for (String s : directionsInput) {
             moveCircle(s);
         }
-        moves.setText("Moves: "+currentMoves);
+        currentSteps +=directionsInput.size();
+        currentMoves++;
+        moves.setText("Steps: "+ currentSteps +"\nMoves: "+currentMoves);
+
+
         reset();
 
         if (reachedGoal()) {
-            inputLabel.setText("Geschafft! Du brauchtest "+currentMoves +" moves");
+            //hier berechnen anstelle von in nextLevel()
+            overallSteps += currentSteps;
+            overallMoves += currentMoves;
+
+            overallScore+=226-(currentSteps *5)-(currentMoves*10);
+
+
+            inputLabel.setText("Geschafft! Du brauchtest "+ currentSteps +" Steps und "+currentMoves +" Moves");
             navigationBox.setVisible(true);
 
             if(currentLvl == 6){
+                overallScore += 4; // so that max score is 1000
                 levelVbox.setVisible(true);
-                overallMoves+=currentMoves;
-                overallScore+=100-(currentMoves*2);
+
                 score.setText("Score: "+overallScore);
-                inputLabel.setText("Spiel durchgespielt! Benötigte Moves: "+overallMoves);
+                inputLabel.setText("Spiel durchgespielt! \n"+ overallSteps +" Steps und "+overallMoves +" Moves! "+keyboardMoves +" davon mit der Tastatur \n [BITTE GEBEN SIE DIESE INFORMATION AN UNS ZURUECK]");
                 nextButton.setVisible(false);
                 hyperLink.setVisible(true);
             }

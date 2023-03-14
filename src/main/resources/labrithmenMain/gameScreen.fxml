@@ -51,7 +51,7 @@
             <Insets />
          </opaqueInsets>
       </GridPane>
-      <Label fx:id="inputLabel" layoutX="464.0" layoutY="637.0" prefHeight="80.0" prefWidth="533.0">
+      <Label fx:id="inputLabel" layoutX="464.0" layoutY="637.0" prefHeight="100.0" prefWidth="533.0">
          <font>
             <Font size="20.0" />
          </font>
@@ -78,7 +78,7 @@
          </font>
       </Text>
       <Button layoutX="302.0" layoutY="677.0" mnemonicParsing="false" onAction="#restartLvl" prefHeight="37.0" prefWidth="126.0" text="restart Level" />
-      <Text fx:id="moves" layoutX="26.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Moves:" wrappingWidth="126.0">
+      <Text fx:id="moves" layoutX="26.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="126.0">
          <font>
             <Font size="20.0" />
          </font>
